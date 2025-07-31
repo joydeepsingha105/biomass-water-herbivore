@@ -204,7 +204,7 @@ for p in P_list:
     storage = FileStorage("out_data.h5")        #output data file
     trackers = ["progress", storage.tracker(0.1)]   #tracker to see the duration of simulation 
 
-    #defining the solver : runge kutta with adaptive time stepping with domain divided into 4 cores
+    #defining the solver : Runge-Kutta with adaptive time stepping with domain divided into 4 cores
     solver_mpi = ExplicitMPISolver(eq, scheme = 'rk', decomposition=4, backend = 'auto', adaptive = True)
 
     #controller for parallel computation specifying the total time duration 
