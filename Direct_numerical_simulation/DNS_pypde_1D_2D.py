@@ -61,7 +61,7 @@ class BWH(PDEBase):
     #def get_initial_state(self, grid, storage, Bini, Wini, Hini):
     
     #if random initial condition is used then no need input of Bini, Wini, Hini
-    def get_initial_state(self. grid, storage)
+    def get_initial_state(self, grid, storage):
         # Random initial condition
         B = ScalarField.random_uniform(grid)
         W = ScalarField.random_uniform(grid)
@@ -73,6 +73,10 @@ class BWH(PDEBase):
         #W.data = Wini 
         #H.data = Hini
         
+        #example of changing initial condition 
+        B.data = 0.5 + (0.01 * B.data)
+        W.data = 1.2
+        H.data = 0.5
 
         #this labels are useful when output data file is analysed later
         B.label = "Plants"
@@ -140,7 +144,7 @@ class BWH(PDEBase):
         #dot = VectorField(state.grid).make_dot_operator()
 
         #numba implementation of the rate equations
-        @nb.jit
+        @nb.jit(nopython=True)
         def pde_rhs(state_data, t):
             B = state_data[0]
             W = state_data[1]
@@ -166,8 +170,8 @@ class BWH(PDEBase):
 
 #domain size in one dimension
 #to implement in two dimension, use Ly for domain length in one dimension
-Lx = 16*np.pi
-mesh = 2048
+Lx = 2*np.pi
+mesh = 512
 
 #defining the grid with periodic boundary condition in one dimension
 grid = CartesianGrid([[0,Lx]], [mesh], periodic = True)
@@ -202,10 +206,10 @@ for p in P_list:
     eq = BWH()          #initialising the PDE class
     eq.P = p            #P input 
     storage = FileStorage("out_data.h5")        #output data file
-    trackers = ["progress", storage.tracker(0.1)]   #tracker to see the duration of simulation 
+    trackers = ["progress", storage.tracker(1.0)]   #tracker to see the duration of simulation 
 
     #defining the solver : Runge-Kutta with adaptive time stepping with domain divided into 4 cores
-    solver_mpi = ExplicitMPISolver(eq, scheme = 'rk', decomposition=4, backend = 'auto', adaptive = True)
+    solver_mpi = ExplicitMPISolver(eq, scheme = 'rk', decomposition=2, backend = 'auto', adaptive = True)
 
     #controller for parallel computation specifying the total time duration 
     controller_mpi = Controller(solver_mpi, t_range = 100, tracker = trackers)
@@ -214,7 +218,7 @@ for p in P_list:
     #state = eq.get_initial_state(grid, storage, Bini, Wini, Hini)	
     
     #generally if random initial condition is used, then no need for Bini, Wini or Hini as input
-    state = eq.get_initial_state(grid, storage, Bini, Wini, Hini)
+    state = eq.get_initial_state(grid, storage)
     
     #to run the model !
     sol = controller_mpi.run(state)
