@@ -7,14 +7,14 @@
 %use direct numerical simulation again to determine the position of the
 %branch/hopf/fold points within the desired numerical accuracy. 
 %% For branch point continuation to find variation in the position of the turing bifurcation point on UV
-p=bpcontini('bwh/UV','bpt3',13,'bwh/SP0boundary'); %branch point continuation w.r.t parameter 13
+p=bpcontini('bwh1/UV','bpt3',13,'bwh1/Turing_UV'); %branch point continuation w.r.t parameter 13
 plotsol(p); mclf(2); pause  %solution profile;to clear fig 2;
-p.nc.dlammax=0.0001;p.nc.lammax=0.608;p.sw.bifcheck=0; 
+p.nc.dlammax=0.0001;p.nc.lammax=1.0;p.sw.bifcheck=0; 
 p.sw.foldcheck=0; %switch of fold 
-p.sol.ds=0.0001; 
-p.nc.tol=1e-7; p.nc.del=0.001; p.nc.njthreshsp=1e4; 
+p.sol.ds=-0.01; 
+p.nc.tol=1e-7; p.nc.del=0.001; p.nc.njthreshsp=1e3; 
 p.sw.spjac=0; %for fuha.spjac
-p.nc.dsmax=0.001; p.nc.dsmin=0.00001; 
+p.nc.dsmax=0.01; p.nc.dsmin=0.00001; 
 p.file.smod=1; p=cont(p,10);
 %% To exit from branch point continuation and check whether regular continuation w.r.t P gives the correct branches 
 p=bpcontexit('bwh/SP0boundary','pt8','bwh/dummy'); %exit from bp cont. with in and out dirs
@@ -28,18 +28,18 @@ p.nc.nq=1; p.nc.ilam=[6,20];
 p.fuha.qf=@qf1; p.fuha.qfder=@qf1der; p.sw.qjac=1; %pc on
 ;p.nc.lammax=600;p=cont(p,50);
 %% for fold point continuation 
-p=spcontini('bwh/SP0','fpt1',13,'bwh/SP0_fold_point'); %fold point cont. 
+p=spcontini('bwh3/SP0','fpt2',13,'bwh3/SP0_fold_point'); %fold point cont. 
 huclean(p);     
 plotsol(p); pause 
 p.nc.dlammax=10; p.nc.lammax=1.5;
 p.nc.del=1e-2;p.nc.njthresh=1e-2; p.nc.njthreshsp=1e5; 
 p.sol.ds=0.0001; p.plot.bpcmp=p.nc.ilam(2); 
-p.nc.tol=1e-5; 
+p.nc.tol=1e-5; p.sw.spjac=0; %for fuha.spjac
 p.file.smod=1; p.sw.bifcheck=0; p.sw.foldcheck=0; 
 p.sw.verb=2; p.nc.dsmax=0.001; p=cont(p,50);
 
 %% Hopf point continuation
-p=hpcontini('bwh1/UH','hpt1',13,'bwh1/UH_hpcont_1'); %hopf point cont
+p=hpcontini('bwh3/UH','hpt1',13,'bwh3/UH_hopf_point'); %hopf point cont
 huclean(p); plotsol(p); p.nc.dlammax=0.0001; 
 p.nc.lammax=0.608;pause 
 p.plot.bpcmp=p.nc.ilam(2);
@@ -52,7 +52,7 @@ p.sw.bifcheck=0; p.sw.foldcheck=0;
 p.nc.dsmax=0.0005;
 p.nc.dsmin=0.00000001
 p.sw.para=1; 
-p=cont(p,200);
+p=cont(p,10);
 %% to exit from hopf point continuation
 p=hpcontexit('P_DHB/TW_O_high_P','pt1000','P_DHB/dummy'); %to exit from hopf point cont
 p=resetc(p); p.sol.ds=-0.1;p.nc.dsmax=0.1; 
