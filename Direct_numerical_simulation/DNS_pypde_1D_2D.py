@@ -212,7 +212,7 @@ for p in P_list:
     solver_mpi = ExplicitMPISolver(eq, scheme = 'rk', decomposition=2, backend = 'auto', adaptive = True)
 
     #controller for parallel computation specifying the total time duration 
-    controller_mpi = Controller(solver_mpi, t_range = 100, tracker = trackers)
+    controller_mpi = Controller(solver_mpi, t_range = 10, tracker = trackers)
 
     #when Bini, Hini, Wini is provided from data or prepared specially as above then the function call to "get_initial_state" with Bini, Wini, Hini as input 
     #state = eq.get_initial_state(grid, storage, Bini, Wini, Hini)	
