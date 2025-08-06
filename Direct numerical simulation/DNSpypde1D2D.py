@@ -61,7 +61,7 @@ class BWH(PDEBase):
     #def get_initial_state(self, grid, storage, Bini, Wini, Hini):
     
     #if random initial condition is used then no need input of Bini, Wini, Hini
-    def get_initial_state(self, grid, storage):
+    def get_initial_state(self, grid, storage, Lx, mesh):
         # Random initial condition
         B = ScalarField.random_uniform(grid)
         W = ScalarField.random_uniform(grid)
@@ -74,9 +74,10 @@ class BWH(PDEBase):
         #H.data = Hini
         
         #example of changing initial condition 
-        B.data = 0.5 + (0.01 * B.data)
+        x = np.linspace(0, Lx, mesh)
+        B.data = 0.5 + (0.01 * np.sin(2 * np.pi * 4 * x/Lx))
         W.data = 1.2
-        H.data = 0.5
+        H.data = 0.25
 
         #this labels are useful when output data file is analysed later
         B.label = "Plants"
@@ -170,8 +171,8 @@ class BWH(PDEBase):
 
 #domain size in one dimension
 #to implement in two dimension, use Ly for domain length in one dimension
-Lx = 2*np.pi
-mesh = 512
+Lx = 4*np.pi
+mesh = 1024
 
 #defining the grid with periodic boundary condition in one dimension
 grid = CartesianGrid([[0,Lx]], [mesh], periodic = True)
@@ -188,7 +189,7 @@ grid = CartesianGrid([[0,Lx]], [mesh], periodic = True)
 ## This data file is not provided but it can generated in the way we have described in the beginning. 
 #keylist = list(f.keys())
 #data = f[keylist[0]]
-#Bini = data[1000][0]    #here the final time data is read and used as initial condition to Bini and Wini
+#Bini = data[1000][0]    #here the final time data (frame no: 10000)is read and used as initial condition to Bini and Wini
 #Wini = data[1000][1]
 #Hini = np.zeros(mesh)   #initialising Hini
 
@@ -199,26 +200,26 @@ grid = CartesianGrid([[0,Lx]], [mesh], periodic = True)
 #Hini = Hini + (np.exp(-(x - Hini_position)**2/(2. * Hini_width**2)) * Hini_height) #final Hini
 #__________________________________________________
 
-P_list = [110]          #precipitation (use 70mm/y for the two dimensional case)
+P_list = [120]          #precipitation (use 70mm/y for the two dimensional case)
 #storage = MemoryStorage()  #useful when using jupyter notebook for the analysis of data without saving a data file   
 
 for p in P_list:
     eq = BWH()          #initialising the PDE class
     eq.P = p            #P input 
-    storage = FileStorage("out_data.h5")        #output data file
-    trackers = ["progress", storage.tracker(1.0)]   #tracker to see the duration of simulation 
+    storage = FileStorage("out_data_t30.h5")        #output data file
+    trackers = ["progress", storage.tracker(0.5)]   #tracker to see the duration of simulation 
 
     #defining the solver : Runge-Kutta with adaptive time stepping with domain divided into 4 cores
     solver_mpi = ExplicitMPISolver(eq, scheme = 'rk', decomposition=2, backend = 'auto', adaptive = True)
 
     #controller for parallel computation specifying the total time duration 
-    controller_mpi = Controller(solver_mpi, t_range = 10, tracker = trackers)
+    controller_mpi = Controller(solver_mpi, t_range = 30, tracker = trackers)
 
     #when Bini, Hini, Wini is provided from data or prepared specially as above then the function call to "get_initial_state" with Bini, Wini, Hini as input 
     #state = eq.get_initial_state(grid, storage, Bini, Wini, Hini)	
     
     #generally if random initial condition is used, then no need for Bini, Wini or Hini as input
-    state = eq.get_initial_state(grid, storage)
+    state = eq.get_initial_state(grid, storage, Lx, mesh)
     
     #to run the model !
     sol = controller_mpi.run(state)
