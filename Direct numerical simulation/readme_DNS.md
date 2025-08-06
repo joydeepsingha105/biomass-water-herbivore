@@ -1,6 +1,6 @@
-# 🌱 vegetation biomass-Soil water-herbivore model — pde2path Implementation
+# 🌱 vegetation biomass-Soil water-herbivore model — Direct Numerical simuulation (DNS) Implementation
 
-This repository contains the `pde2path` implementation of a vegetation-soil water-herbivore model. The code enables the computation of the bifurcation diagram of model that includes uniform, periodic and travelling wave solutions. 
+This repository contains the `py-pde` implementation of a vegetation-soil water-herbivore model. It enables the direct numerical simulation of the model for a given initial condition in one and two dimensional domains. A separate jupyter notebook containing script for post precessing in pyplot is also given. The user is encourged to read the reference sheet for brief explanation of the codes.  
 
 ---
 
@@ -8,12 +8,10 @@ This repository contains the `pde2path` implementation of a vegetation-soil wate
 
 ## ⚙️ Requirements
 
-- MATLAB (R2020 or later)
-- [pde2path](https://www.staff.uni-oldenburg.de/hannes.uecker/pde2path/)
+- py-pde (https://py-pde.readthedocs.io/en/latest/)
+- python 3.10 or later
 
----
 
-## 📎 References
 
 - Main paper: arXiv:2410.04305, *submitted/in preparation*
 - For `pde2path`: Uecker (2021), Rademacher & Uecker (2018).  
