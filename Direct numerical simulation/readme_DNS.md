@@ -14,8 +14,6 @@ This repository contains the `py-pde` implementation of a vegetation-soil water-
 
 
 - Main paper: arXiv:2410.04305, *submitted/in preparation*
-- For `pde2path`: Uecker (2021), Rademacher & Uecker (2018).  
-  👉 [https://pde2path.uol.de/tutorials.html](https://pde2path.uol.de/tutorials.html)
 
 ---
 
