@@ -1,7 +1,7 @@
   # 🌱 vegetation biomass-Soil water-herbivore model
 
---- This repository contains the python codes for direct numerical simulation of the vegetation-soil water-herbivore model and MATLAB codes for numerical
-continuation to create bifurcaton diagram.
+--- This repository contains the python codes for direct numerical simulation of the vegetation-soil water-herbivore model (pydns) and MATLAB codes for numerical
+continuation to create bifurcaton diagram (bwhcont).
 
 ---
 
