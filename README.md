@@ -3,6 +3,7 @@
 This repository contains two primary components:
 1. Python scripts for the direct numerical simulation of the vegetation–soil water–herbivore model (pydns).
 2. MATLAB scripts for performing numerical continuation and constructing the corresponding bifurcation diagram (bwhcont).
+
 A comprehensive reference sheet is included, providing detailed descriptions of all files, along with instructions for executing the simulations and generating the results.
 ---
 
