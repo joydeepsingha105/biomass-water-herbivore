@@ -4,7 +4,7 @@ p.nc.neq=3; p.sw.sfem=-1;
 p.fuha.outfu=@hobrax; % mod of llibrary function hobra 
 p.pdeo=stanpdeo1D(lx,2*lx/nx); p.vol=2*lx; % standard 1D PDE object 
 p.np=p.pdeo.grid.nPoints; p.nu=p.np*p.nc.neq; % # PDE unknowns 
-p.nc.neig=30; % #eigenvalues to compute, and reference point for this 
+p.nc.eigref=-4;p.nc.neig=30; % #eigenvalues to compute, and reference point for this 
 p.sol.xi=1/p.nu; p.sw.para=2; 
 p.nc.ilam=6;  % use par(6) (P) for continuation 
 p.sol.ds=0.1; p.nc.dsmax=10; % initial and maximal stepsize 
@@ -21,4 +21,5 @@ np=p.np; B=zeros(np,1); W=(par(6)/par(7))*ones(np,1); H=zeros(np,1);
 p.u=[B; W; H; par']; % initial solution (bare soil) and parameters
 p=box2per(p,1);      % switch on periodic BCs, this also calls oosetfemops  
 p.plot.pcmp=[1 2 3]; p.plot.cl={'k','b','r'}; % plotting settings 
+
 screenlayout(p); p.sw.verb=2; % place windows; choose verbosity of output 
